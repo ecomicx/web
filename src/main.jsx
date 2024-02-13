@@ -4,7 +4,7 @@ import './index.css'
 
 import App from './App'
 
-import SignIn from './views/Sessions/SignIn'
+import Sign from './views/Sign'
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
@@ -12,15 +12,17 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
-    errorElement: <h1>Not Found</h1>,
+    errorElement: <h1>Not Found</h1>, 
     children: [
       {
         path: '/sign-in',
-        element: <SignIn />
+        element: <Sign isLogin />,
+        exact: true
       },
       {
         path: '/about',
         element: <h1>About weffeeeeee efwfwfwfwqef wefwefwefwefwefwefwe</h1>
+
       }
     ]
   }
