@@ -4,7 +4,7 @@ import './index.css'
 
 import App from './App'
 
-import { SignIn } from './views'
+import SignIn from './views/Sessions/SignIn'
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
