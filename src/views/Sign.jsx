@@ -66,10 +66,12 @@ const Sign = ({ isLogin }) => {
             <Typography component="h1" variant="h5">
               {isLogin ? "Acessar a minha conta" : "Criar uma conta"}
             </Typography>
-            <form  style={classes.form}  noValidate onSubmit={()=>{}}>
+            <form  style={classes.form}  onSubmit={()=>{
+              event.preventDefault()
+            }}>
               {!isLogin && (
                 <Box mt={4}>
-                  <span>Digite seu nome completo</span>
+                  <span>Digite seu nome completo *</span>
                   <TextField
                     style={classes.textField}
                     variant="outlined"
@@ -77,10 +79,8 @@ const Sign = ({ isLogin }) => {
                     margin="normal"
                     required
                     fullWidth
-                    id="email"
-                    placeholder='user@email.com'
-                    name="email"
-                    autoComplete="email"
+                    placeholder='Clementina da Silva'
+                    name="name"
                     // value={email}
                     // onChange={e => setEmail(e.target.value)}
                     // error={error}
@@ -88,7 +88,7 @@ const Sign = ({ isLogin }) => {
                 </Box>
               )}
               <Box mt={isLogin ? 4 : 2}>
-                <span>Digite seu e-mail</span>
+                <span>Digite seu e-mail *</span>
                 <TextField
                   style={classes.textField}
                   variant="outlined"
@@ -106,7 +106,7 @@ const Sign = ({ isLogin }) => {
                 />
               </Box>
               <Box mt={2}>
-                <span>Digite sua senha</span>
+                <span>Digite sua senha *</span>
                 <TextField
                   style={classes.textField}
                   variant="outlined"
@@ -145,8 +145,8 @@ const Sign = ({ isLogin }) => {
                       </Link>
                     </Grid>
                     <Grid item>
-                      <Link href="#" variant="body2">
-                        {"Ainda não tem uma conta?"}
+                      <Link href="/sign-up" variant="body2">
+                        Ainda não tem uma conta?
                       </Link>
                     </Grid>
                 </>
@@ -155,7 +155,6 @@ const Sign = ({ isLogin }) => {
             </form>
           </div>
         </Container>
-
         </Box>
       </Box>
   )

@@ -20,6 +20,11 @@ const router = createBrowserRouter([
         exact: true
       },
       {
+        path: '/sign-up',
+        element: <Sign />,
+        exact: true
+      },
+      {
         path: '/about',
         element: <h1>About weffeeeeee efwfwfwfwqef wefwefwefwefwefwefwe</h1>
 
