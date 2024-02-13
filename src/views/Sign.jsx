@@ -8,6 +8,12 @@ import {
   Box,
 } from '@mui/material'
 
+import { useForm, Controller } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import * as yup from "yup"
+
+import users from '../services/users'
+
 const classes = {
   paper: {
     margin: '50% 0',
@@ -52,6 +58,37 @@ const classes = {
 
 // eslint-disable-next-line react/prop-types
 const Sign = ({ isLogin }) => {
+
+  const schema = yup
+  .object({
+    ...(!isLogin && { name: yup.string().required('Nome é obrigatório') }),
+    email: yup.string().email('E-mail não é valido').required('E-mail é obrigatório'),
+    password: yup.string().required('Senha é obrigatória').min(8, '8 é O minimo de caracteres.')
+  })
+
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema)
+  })
+
+  const handleLogin = async (data) => {
+    const response = await  users.login(data)
+    alert('Login')
+    console.log(response)
+  }
+
+  const handleRegister = (data) => {console.log(data)}
+
+  
+  const onSubmit = (data) => {
+    if(isLogin) return handleLogin(data)
+
+    return handleRegister(data)
+  }
+
   return (
       <Box style={classes.box}>
         <Box style={classes.boxColumn}>
@@ -66,62 +103,67 @@ const Sign = ({ isLogin }) => {
             <Typography component="h1" variant="h5">
               {isLogin ? "Acessar a minha conta" : "Criar uma conta"}
             </Typography>
-            <form  style={classes.form}  onSubmit={()=>{
-              event.preventDefault()
-            }}>
+            <form  style={classes.form} onSubmit={handleSubmit(onSubmit)}>
               {!isLogin && (
                 <Box mt={4}>
                   <span>Digite seu nome completo *</span>
-                  <TextField
-                    style={classes.textField}
-                    variant="outlined"
-                    color="secondary"
-                    margin="normal"
-                    required
-                    fullWidth
-                    placeholder='Clementina da Silva'
-                    name="name"
-                    // value={email}
-                    // onChange={e => setEmail(e.target.value)}
-                    // error={error}
+                  <br />  <br />
+                  <Controller render={({ field }) => (
+                    <TextField
+                      style={classes.textField}
+                      variant="outlined"
+                      color="secondary"
+                      fullWidth
+                      placeholder='Clementina da Silva'
+                      name="name"
+                      error={errors?.name}
+                      helperText={errors?.name?.message}
+                      {...field}
+                    />
+                  )} 
+                  name="name" 
+                  control={control}
                   />
                 </Box>
               )}
               <Box mt={isLogin ? 4 : 2}>
                 <span>Digite seu e-mail *</span>
-                <TextField
-                  style={classes.textField}
-                  variant="outlined"
-                  color="secondary"
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="email"
-                  placeholder='user@email.com'
-                  name="email"
-                  autoComplete="email"
-                  // value={email}
-                  // onChange={e => setEmail(e.target.value)}
-                  // error={error}
+                 <br />  <br />
+                <Controller render={({ field }) => (
+                    <TextField
+                      style={classes.textField}
+                      variant="outlined"
+                      color="secondary"
+                      fullWidth
+                      placeholder='user@email.com'
+                      autoComplete="email"
+                      error={errors?.email}
+                      helperText={errors?.email?.message}
+                      {...field}
+                    />
+                  )} 
+                  name="email" 
+                  control={control}
                 />
               </Box>
               <Box mt={2}>
                 <span>Digite sua senha *</span>
-                <TextField
-                  style={classes.textField}
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="password"
-                  placeholder='password'
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                  // value={senha}
-                  // onChange={e => setSenha(e.target.value)}
-                  // error={error}
-                  // helperText={helperText}
+                <br />  <br />
+                <Controller render={({ field }) => (
+                    <TextField
+                      style={classes.textField}
+                      variant="outlined"
+                      color="secondary"
+                      fullWidth
+                      placeholder='*********'
+                      autoComplete="password"
+                      error={errors?.password}
+                      helperText={errors?.password?.message}
+                      {...field}
+                    />
+                  )} 
+                  name="password" 
+                  control={control}
                 />
               </Box>
               
@@ -130,27 +172,22 @@ const Sign = ({ isLogin }) => {
                   type="submit"
                   fullWidth
                   variant="contained"
-                  // disabled={botaoDesabilitado}
                   style={classes.submit}
                 >
                   Acessar
                 </Button>
               </Box>
               <Grid container>
-                {isLogin && (
-                  <>
-                    <Grid item xs>
-                      <Link href="#" variant="body2">
-                        Esqueceu a senha?
-                      </Link>
-                    </Grid>
-                    <Grid item>
-                      <Link href="/sign-up" variant="body2">
-                        Ainda não tem uma conta?
-                      </Link>
-                    </Grid>
-                </>
-                )}
+                <Grid item xs>
+                  <Link href="#" variant="body2">
+                    Esqueceu a senha?
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link href={isLogin ? '/sign-up' : "/sign-in"} variant="body2">
+                   {isLogin ?  'Ainda não tem uma conta?' : 'Já tem uma conta? Acessar'}
+                  </Link>
+                </Grid>
               </Grid>
             </form>
           </div>
